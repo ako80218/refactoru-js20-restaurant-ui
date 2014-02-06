@@ -73,7 +73,7 @@ var Drink = function(name, description, price, ingredients){
 Drink.prototype= new MenuItem();
 Drink.prototype.create = function(){
 	
-	return  $('<li class="drink">{name}</li>'.supplant(this));
+	return  $('<li class="drink order-item">{name}</li>'.supplant(this));
 };
 
 
@@ -83,19 +83,19 @@ var Plate = function(name, description, price, ingredients){
 Plate.prototype= new MenuItem();
 Plate.prototype.create = function(){
 	
-	return  $('<li class="plate">{name}</li>'.supplant(this));
+	return  $('<li class="plate order-item">{name}</li>'.supplant(this));
 };
 
 
-var Order = function(plates){
-this.plates = plates;
+var Order = function(menuItems){
+this.menuItems = menuItems;
 };
 Order.prototype.toString = function(){
-	return "Order plates: {0}".supplant([this.plates.toString()]);
+	return "Order Items: {0}".supplant([this.menuItems.toString()]);
 };
 Order.prototype.create = function(){
 	
-	return  $('<div class="food-item">{name}</div>'.supplant(this));
+	return  $('<div class="order"></div>');
 };
 
 
@@ -146,8 +146,20 @@ Customer.prototype.toString = function(){
 	return "Dietary preferences: {0}".supplant([this.dietaryPreference.toString()]);
 };
 
+//////////////// EVENT HANDLERS ///////////////////////
+$(document).on('click', '.order-item', function(){
+	console.log('CLICKED');
+	if (order.menuItems === []){
+		console.log('empty!!!!');
+
+	}
+
+});
 
 //////////////// INSTANTIATE OBJECT HIERARCHY ///////////////////////
+
+/////ORDER OBJECT
+var order = new Order([]);
 
 /////FOOD ITEMS
 var salt = new FoodItem('salt', 0, true, true, true);
@@ -179,4 +191,7 @@ var myRestaurant = new Restaurant("Tequila Nirvana", "~~Spanish Hindu Fusion~~",
 ////////  MAIN  
 
 console.log(myRestaurant.toString());
+
 $('body').prepend(myRestaurant.create());
+
+
