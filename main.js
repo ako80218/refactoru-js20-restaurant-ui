@@ -1,4 +1,17 @@
-///Restaurant Objects:
+/////function returns navbar jQuery object 
+var createNavBar = function () {
+	return $("<nav>\
+				<ul>\
+					<li><button>View Order</button></li>\
+					<li><button>button 2</button></li>\
+					<li><button>button 3</button></li>\
+				</ul>\
+			</nav>");
+};
+
+
+
+////////Restaurant Objects:
 var MenuItem = function(name, description, price, ingredients){
 	this.name = name;
 	this.description = description;
@@ -73,7 +86,7 @@ var Drink = function(name, description, price, ingredients){
 Drink.prototype= new MenuItem();
 Drink.prototype.create = function(){
 	
-	return  $('<li class="drink order-item">{name}</li>'.supplant(this));
+	return  $('<li class="drink order-item"><div><img src="images/drink.png"></img><h3>{name}</h3><button class="order-btn">Add to Order</button></div></li>'.supplant(this));
 };
 
 
@@ -83,7 +96,7 @@ var Plate = function(name, description, price, ingredients){
 Plate.prototype= new MenuItem();
 Plate.prototype.create = function(){
 	
-	return  $('<li class="plate order-item">{name}</li>'.supplant(this));
+	return  $('<li class="plate order-item"><div><img src="images/plate.png"><h3>{name}</h3><button class="order-btn">Add to Order</button></div></li>'.supplant(this));
 };
 
 
@@ -112,7 +125,7 @@ Menu.prototype.toString = function(){
 };
 Menu.prototype.create = function(){
 
-	var menuElement = $('<div class="menu"><ul></ul></div>');
+	var menuElement = $('<div class="menu"><ul class="menu-list"></ul></div>');
 	for (var i = 0; i < this.menuItems.length; i++){
 		menuElement.find("ul").append(this.menuItems[i].create());
 	}
@@ -130,13 +143,17 @@ Restaurant.prototype.toString = function(){
 };
 Restaurant.prototype.create = function(){
 	
-	return  $('<div class="restaurant">\
+	var restObj = $('<div class="restaurant">\
 			<header>\
 				<h1>{name}</h1>\
 				<h2>{description}</h2>\
-				<nav></nav>\
 			</header>\
 		</div>'.supplant(this)).append(this.menu.create());
+
+	restObj.find("header").append(createNavBar());
+ 
+ 	return restObj;
+
 };
 
 var Customer = function(dietaryPreference){

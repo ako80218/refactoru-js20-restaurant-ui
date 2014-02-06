@@ -1,0 +1,27 @@
+body {
+	background-color: #34495e;
+	font-size: 12px;
+}
+
+.restaurant {
+	max-width: 800px;
+	margin: 0 auto;
+	background-color: #FBFCFC;
+}
+.order-item img{
+	max-width: 100px;
+}
+.restaurant ul{
+	list-style-type: none;
+
+}
+.restaurant nav ul li{
+	float: right;
+	margin-right: 12px;
+	margin-bottom: 12px;
+}
+.restaurant header{
+	overflow: auto;
+	background: #e74c3c;
+}
+ 
