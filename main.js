@@ -1,12 +1,14 @@
 /////function returns navbar jQuery object 
 var createNavBar = function () {
 	return $("<nav>\
-				<ul>\
-					<li><button>View Order</button></li>\
-					<li><button>button 2</button></li>\
-					<li><button>button 3</button></li>\
-				</ul>\
-			</nav>");
+			<ul>\
+				<li>\
+					<button id='view-order-btn' class='btn btn-primary btn-lg' data-toggle='modal' data-target='#myModal'>\
+						View Order\
+					</button>\
+				</li>\
+			</ul>\
+		</nav>");
 };
 
 
@@ -32,14 +34,16 @@ MenuItem.prototype.isGlutenFree = function(){
 			return false;
 		}
 	}
-	return  true;};
+	return  true;
+};
 MenuItem.prototype.isCitrusFree = function(){
 	for (var i =0; i<this.ingredients.length; i++){
 		if (!this.ingredients[i].citrusFree){
 			return false;
 		}
 	}
-	return  true;};
+	return  true;
+};
 MenuItem.prototype.toString = function(){
 	//console.log(this.ingredients.toString().replace(/,/g , ""));
 	return "{0}: {1}  Price: {2}. {3}{4}{5}   \nIngredients: {6}".supplant([
@@ -84,9 +88,17 @@ var Drink = function(name, description, price, ingredients){
 	MenuItem.call(this, name, description, price, ingredients);
 };
 Drink.prototype= new MenuItem();
-Drink.prototype.create = function(){
+Drink.prototype.create = function(isOrderItem){
+
+	if (isOrderItem){
+		return  $('<li class="drink order-item" data-item="{name}"><div><button class="remove-order-btn btn btn-info btn-lg">Remove from Order</button><img src="images/drink.png"></img><h3>{name}</h3></div></li>'.supplant(this));
+
+
+	} else {
+		return  $('<li class="drink order-item" data-item="{name}"><div><button class="order-btn btn btn-info btn-lg">Add to Order</button><img src="images/drink.png"></img><h3>{name}</h3></div></li>'.supplant(this));
+
+	}
 	
-	return  $('<li class="drink order-item"><div><img src="images/drink.png"></img><h3>{name}</h3><button class="order-btn">Add to Order</button></div></li>'.supplant(this));
 };
 
 
@@ -94,9 +106,16 @@ var Plate = function(name, description, price, ingredients){
 	MenuItem.call(this, name, description, price, ingredients);
 };
 Plate.prototype= new MenuItem();
-Plate.prototype.create = function(){
+Plate.prototype.create = function(isOrderItem){
 	
-	return  $('<li class="plate order-item"><div><img src="images/plate.png"><h3>{name}</h3><button class="order-btn">Add to Order</button></div></li>'.supplant(this));
+	if (isOrderItem){
+		return  $('<li class="plate order-item" data-item="{name}"><div><button class="remove-order-btn btn btn-info btn-lg">Remove from Order</button><img src="images/plate.png"><h3>{name}</h3></div></li>'.supplant(this));
+
+	} else {
+		return  $('<li class="plate order-item" data-item="{name}"><div><button class="order-btn btn btn-info btn-lg">Add to Order</button><img src="images/plate.png"><h3>{name}</h3></div></li>'.supplant(this));
+
+	}
+	
 };
 
 
@@ -106,9 +125,14 @@ this.menuItems = menuItems;
 Order.prototype.toString = function(){
 	return "Order Items: {0}".supplant([this.menuItems.toString()]);
 };
-Order.prototype.create = function(){
+Order.prototype.create = function(isOrderItem){
 	
-	return  $('<div class="order"></div>');
+	// return  $('<div class="order"></div>');
+	var orderElement = $('<div class="order"><ul class="order-list"></ul></div>');
+	for (var i = 0; i < this.menuItems.length; i++){
+		orderElement.find("ul").append(this.menuItems[i].create(isOrderItem? true: false));
+	}
+	return orderElement;
 };
 
 
@@ -163,13 +187,58 @@ Customer.prototype.toString = function(){
 	return "Dietary preferences: {0}".supplant([this.dietaryPreference.toString()]);
 };
 
+/////////////////////////////////////////////////////////
 //////////////// EVENT HANDLERS ///////////////////////
-$(document).on('click', '.order-item', function(){
-	console.log('CLICKED');
-	if (order.menuItems === []){
-		console.log('empty!!!!');
-
+$(document).on('click', '.order-btn', function(){
+	if (order.menuItems.length === 0){
+		// console.log('empty!!!!');
 	}
+	for (var i=0; i<myMenu.menuItems.length; i++){
+		if (myMenu.menuItems[i].name === $(this).closest('li').attr('data-item')){
+			order.menuItems.push(myMenu.menuItems[i]);
+		}
+	}
+
+});
+
+//toggles visibity of add to order button when  user hovers over .order-item li
+$(document).on('mouseenter', '.order-item', function(){
+	$(this).find('.order-btn').toggle();
+	$(this).css('background', '#dedede');
+});$(document).on('mouseleave', '.order-item', function(){
+	$(this).find('.order-btn').toggle();
+	$(this).css('background', 'inherit');
+});
+
+//toggles visibity of "remove from order" button when  user hovers over .order-item li
+$(document).on('mouseenter', '.order-item', function(){
+	$(this).find('.remove-order-btn').toggle();
+	$(this).css('background', '#dedede');
+});$(document).on('mouseleave', '.order-item', function(){
+	$(this).find('.remove-order-btn').toggle();
+	$(this).css('background', 'inherit');
+});
+
+$(document).on('click', '#view-order-btn', function(){
+	$(".modal-body").append(order.create(true));
+
+
+});
+
+$(document).on('mouseenter', '.restaurant', function(){
+	$(".modal-body").empty();
+});
+
+$(document).on('click', '.remove-order-btn', function(){
+
+		for (var i=0; i<order.menuItems.length; i++){
+		if (order.menuItems[i].name === $(this).closest('li').attr('data-item')){
+			$(this).closest("li").toggle();
+			order.menuItems.splice(i+1, 1);
+			return;
+		}
+	}
+	
 
 });
 

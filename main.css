@@ -24,4 +24,11 @@ body {
 	overflow: auto;
 	background: #e74c3c;
 }
- 
+.order-btn{
+	display: none;
+	float: right;
+ }
+.remove-order-btn{
+	display: none;
+	float: right;
+ }
