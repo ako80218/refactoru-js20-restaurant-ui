@@ -247,7 +247,7 @@ $(document).on('click', '.remove-order-btn', function(){
 /////ORDER OBJECT
 var order = new Order([]);
 
-/////FOOD ITEMS
+/////FOOD ITEMS   FoodItem function(name, calories, isVegan, isGlutenFree, isCitrusFree)
 var salt = new FoodItem('salt', 0, true, true, true);
 var lime = new FoodItem('lime', 20, true, true, false);
 var tequila = new FoodItem('tequila', 200, true, true, true);
@@ -259,17 +259,25 @@ var cheese = new FoodItem('cheese', 250, false, true, true);
 var tortilla = new FoodItem('tortilla', 100, true, false, true);
 var beans = new FoodItem('beans', 100, true, true, true);
 var beef = new FoodItem('beef', 200, false, true, true);
+var rice = new FoodItem('rice', 50, true, true, true);
+var sauceKorma = new FoodItem('rice', 200, true, true, true);
+var mango = new FoodItem('mango', 150, true, true, true);
+var yoghurt = new FoodItem('yoghurt', 150, true, true, true);
+ 
 
 ///// DRINKS
 var manhattan = new Drink("manhattan", "adult bev", "$9.00", ["sweet vermouth", "soda", "cherries"]);
 var margarita = new Drink("margarita", "Delicious made lime juice and good tequila", "$15", [tequila, lime, salt]);
+var lassiMango = new Drink("mango lassi", "Delicious made mango and yoghurt", "$15", [mango, yoghurt]);
+
 
 /////// PLATES
 var guacamole = new Plate("guacamole", "Delicious, made fresh daily, green!", "$10", [avocado, salt, lime]);
 var beanBurrito = new Plate("bean burrito", "Delicious made with fresh ingredients", "$9", [tortilla, lettuce, cheese, beans]);
+var beefKorma = new Plate("beef korma", "Delicious made with fresh ingredients", "$12", [rice, beef, sauceKorma]);
 
 ///////  MENU
-var myMenu = new Menu ([guacamole, beanBurrito, margarita]);
+var myMenu = new Menu ([margarita, lassiMango, beefKorma, guacamole, beanBurrito ]);
 
 /////////  RESTAURANT
 var myRestaurant = new Restaurant("Tequila Nirvana", "~~Spanish Hindu Fusion~~", myMenu);
